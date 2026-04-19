@@ -1,0 +1,78 @@
+export const Theme = {
+  colors: {
+    primary: '#00450d',
+    primaryContainer: '#1b5e20',
+    onPrimary: '#ffffff',
+    secondary: '#006e1c',
+    secondaryContainer: '#91f78e',
+    onSecondaryContainer: '#00731e',
+    tertiary: '#755b00',
+    tertiaryContainer: '#cea62c',
+    onTertiaryContainer: '#4f3d00',
+    background: '#f9f9f9',
+    surface: '#f9f9f9',
+    surfaceBright: '#f9f9f9',
+    surfaceDim: '#dadada',
+    surfaceContainerLow: '#f3f3f3',
+    surfaceContainerLowest: '#ffffff',
+    surfaceContainerHigh: '#e8e8e8',
+    surfaceContainerHighest: '#e2e2e2',
+    onSurface: '#1a1c1c',
+    onSurfaceVariant: '#41493e',
+    outline: '#717a6d',
+    outlineVariant: '#c0c9bb',
+    error: '#ba1a1a',
+    onError: '#ffffff',
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 40,
+  },
+  roundness: {
+    sm: 4,
+    md: 12,
+    lg: 16,
+    xl: 24,
+  },
+  typography: {
+    displayLg: {
+      fontFamily: 'PlusJakartaSans_700Bold',
+      fontSize: 56,
+      lineHeight: 64,
+    },
+    headlineMd: {
+      fontFamily: 'PlusJakartaSans_600SemiBold',
+      fontSize: 28,
+      lineHeight: 36,
+    },
+    titleMd: {
+      fontFamily: 'BeVietnamPro_500Medium',
+      fontSize: 18,
+      lineHeight: 24,
+    },
+    bodyMd: {
+      fontFamily: 'BeVietnamPro_400Regular',
+      fontSize: 14,
+      lineHeight: 20,
+    },
+    labelSm: {
+      fontFamily: 'PlusJakartaSans_600SemiBold',
+      fontSize: 11,
+      lineHeight: 16,
+      letterSpacing: 0.5,
+    },
+  },
+  shadows: {
+    ambient: {
+      shadowColor: '#1a1c1c',
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.06,
+      shadowRadius: 32,
+      elevation: 4,
+    },
+  }
+};

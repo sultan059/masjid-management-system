@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(choco install *)",
+      "Bash(/c/apache-maven-3.9.0/bin/mvn.cmd *)",
+      "Bash(start *)",
+      "Bash(cmd *)",
+      "Bash(where java *)",
+      "Bash(/c/apache-maven-3.9.0/bin/mvn -f /d/react_native_proj/masjid-management-system/backend/pom.xml clean compile)",
+      "Bash(java *)",
+      "Bash(/c/apache-maven-3.9.0/bin/mvn *)",
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" /c/apache-maven-3.9.0/bin/mvn -f /d/react_native_proj/masjid-management-system/backend/pom.xml clean compile)",
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" /c/apache-maven-3.9.0/bin/mvn *)",
+      "Bash(/c/Program Files/Java/jdk-21/bin/java *)",
+      "Bash(docker run *)",
+      "Bash(wmic process *)"
+    ]
+  }
+}
