@@ -35,10 +35,10 @@ SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-function AppDrawer() {
+function AppDrawer({ onLogout }) {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerContent={(props) => <CustomDrawerContent {...props} onLogout={onLogout} />}
       screenOptions={{
         headerShown: false,
         drawerStyle: {
@@ -103,7 +103,9 @@ export default function App() {
             {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
           </Stack.Screen>
         ) : (
-          <Stack.Screen name="Main" component={AppDrawer} />
+          <Stack.Screen name="Main">
+            {(props) => <AppDrawer {...props} onLogout={() => setIsAuthenticated(false)} />}
+          </Stack.Screen>
         )}
       </Stack.Navigator>
     </NavigationContainer>

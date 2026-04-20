@@ -40,6 +40,7 @@ const menuItems = [
 
 const CustomDrawerContent = (props) => {
   const [language, setLanguage] = useState('en');
+  const { onLogout } = props;
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === 'en' ? 'bn' : 'en'));
@@ -49,10 +50,9 @@ const CustomDrawerContent = (props) => {
     try {
       await authService.logout();
       props.navigation.closeDrawer();
-      props.navigation.reset({
-        index: 0,
-        routes: [{ name: 'Login' }],
-      });
+      if (onLogout) {
+        setTimeout(() => onLogout(), 300);
+      }
     } catch (error) {
       Alert.alert('Error', 'Failed to logout. Please try again.');
     }

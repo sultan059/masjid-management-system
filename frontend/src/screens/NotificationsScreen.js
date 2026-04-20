@@ -9,11 +9,13 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
-import { Bell, MessageSquare, Info, AlertTriangle, ChevronRight, Check } from 'lucide-react-native';
+import { Bell, MessageSquare, Info, AlertTriangle, ChevronRight, Check, Menu } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import notificationService from '../services/notificationService';
 
 const NotificationsScreen = () => {
+  const navigation = useNavigation();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -90,6 +92,9 @@ const NotificationsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
+          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+        </TouchableOpacity>
         <Text style={styles.title}>Notifications</Text>
         <TouchableOpacity onPress={markAllRead}>
            <Text style={styles.markRead}>Mark all read</Text>

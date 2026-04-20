@@ -10,11 +10,13 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
-import { Calendar, Clock, MapPin, Users, ChevronRight, Plus } from 'lucide-react-native';
+import { Calendar, Clock, MapPin, Users, ChevronRight, Plus, Menu } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import eventService from '../services/eventService';
 
 const EventsScreen = () => {
+  const navigation = useNavigation();
   const [events, setEvents] = useState([]);
   const [featuredEvents, setFeaturedEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,6 +68,9 @@ const EventsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
+          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+        </TouchableOpacity>
         <Text style={styles.title}>Events</Text>
         <TouchableOpacity style={styles.headerIcon}>
            <Calendar size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />

@@ -10,12 +10,14 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
-import { BarChart2, PieChart, TrendingUp, Download, ChevronRight, Filter } from 'lucide-react-native';
+import { BarChart2, PieChart, TrendingUp, Download, ChevronRight, Filter, Menu } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import reportService from '../services/reportService';
 import transactionService from '../services/transactionService';
 
 const ReportsScreen = () => {
+  const navigation = useNavigation();
   const [reportData, setReportData] = useState(null);
   const [stats, setStats] = useState({ weeklyIncome: 0, monthlyIncome: 0, weeklyExpense: 0, monthlyExpense: 0 });
   const [loading, setLoading] = useState(true);
@@ -74,6 +76,9 @@ const ReportsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
+          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+        </TouchableOpacity>
         <Text style={styles.title}>Reports</Text>
         <TouchableOpacity style={styles.headerIcon}>
            <Filter size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />

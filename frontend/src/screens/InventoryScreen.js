@@ -9,11 +9,13 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
-import { Package, MoreVertical, Plus, Filter, Search } from 'lucide-react-native';
+import { Package, MoreVertical, Plus, Filter, Search, Menu } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import inventoryService from '../services/inventoryService';
 
 const InventoryScreen = () => {
+  const navigation = useNavigation();
   const [inventoryItems, setInventoryItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -82,6 +84,9 @@ const InventoryScreen = () => {
     <SafeAreaView style={styles.container}>
       {/* --- Filter & Header --- */}
       <View style={styles.header}>
+        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
+          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+        </TouchableOpacity>
         <Text style={styles.title}>Inventory</Text>
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.headerIcon}>

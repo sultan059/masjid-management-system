@@ -10,12 +10,14 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
-import { CreditCard, DollarSign, ArrowUpRight, ArrowDownLeft, ChevronRight, Plus } from 'lucide-react-native';
+import { CreditCard, DollarSign, ArrowUpRight, ArrowDownLeft, ChevronRight, Plus, Menu } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import donationService from '../services/donationService';
 import transactionService from '../services/transactionService';
 
 const PaymentsScreen = () => {
+  const navigation = useNavigation();
   const [transactions, setTransactions] = useState([]);
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -80,6 +82,9 @@ const PaymentsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
+          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+        </TouchableOpacity>
         <Text style={styles.title}>Payments</Text>
         <TouchableOpacity style={styles.receiveButton}>
            <Plus size={20} color={Theme.colors.onPrimary} />
