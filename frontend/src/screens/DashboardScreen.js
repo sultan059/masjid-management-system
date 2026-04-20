@@ -21,10 +21,12 @@ import {
   TrendingUp,
   AlertCircle
 } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import dashboardService from '../services/dashboardService';
 
 const DashboardScreen = () => {
+  const navigation = useNavigation();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -79,7 +81,7 @@ const DashboardScreen = () => {
       {/* --- Header: Ultra Compact --- */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
             <Menu size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
           </TouchableOpacity>
           <View style={styles.headerTextContainer}>

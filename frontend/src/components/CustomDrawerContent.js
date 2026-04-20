@@ -1,73 +1,160 @@
-import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  SafeAreaView 
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  Alert,
 } from 'react-native';
-import { 
-  DrawerContentScrollView, 
-  DrawerItemList 
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
 } from '@react-navigation/drawer';
-import { 
-  User, 
-  Settings, 
-  LogOut, 
-  Languages, 
-  Moon 
+import {
+  User,
+  Settings,
+  LogOut,
+  Languages,
+  Moon,
+  LayoutDashboard,
+  Wallet,
+  Package,
+  BarChart3,
+  Calendar,
+  Building2,
+  X,
+  LogIn,
 } from 'lucide-react-native';
+import authService from '../services/authService';
 import { Theme } from '../theme/Theme';
 
+const menuItems = [
+  { name: 'Dashboard', label: 'Dashboard', icon: LayoutDashboard, active: true },
+  { name: 'Financials', label: 'Financials', icon: Wallet, active: false },
+  { name: 'Inventory', label: 'Inventory', icon: Package, active: false },
+  { name: 'Reports', label: 'Reports', icon: BarChart3, active: false },
+  { name: 'Events', label: 'Events', icon: Calendar, active: false },
+  { name: 'MosqueInfo', label: 'Mosque Information', icon: Building2, active: false },
+];
+
 const CustomDrawerContent = (props) => {
+  const [language, setLanguage] = useState('en');
+
+  const toggleLanguage = () => {
+    setLanguage((prev) => (prev === 'en' ? 'bn' : 'en'));
+  };
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      props.navigation.closeDrawer();
+      props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Failed to logout. Please try again.');
+    }
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <DrawerContentScrollView {...props} contentContainerStyle={{ paddingTop: 0 }}>
-        {/* --- Profile Header --- */}
+    <SafeAreaView style={styles.container}>
+      <DrawerContentScrollView
+        {...props}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Language Toggle Pill (Top-most) */}
+        <View style={styles.topRow}>
+          <TouchableOpacity
+            style={styles.languageToggle}
+            onPress={toggleLanguage}
+          >
+            <Languages size={14} color={Theme.colors.primary} />
+            <Text style={styles.languageText}>EN | বাংলা</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogout}
+          >
+            <LogIn size={14} color={Theme.colors.onPrimary} />
+            <Text style={styles.loginButtonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Profile Header Section */}
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
-            <User color={Theme.colors.onPrimary} size={32} strokeWidth={1.5} />
+            <User color={Theme.colors.onPrimary} size={36} strokeWidth={1.5} />
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.userName}>Sultan Ahmed</Text>
-            <Text style={styles.userRole}>Super Admin</Text>
+            <Text style={styles.userName}>Ahmed Khan</Text>
+            <View style={styles.roleContainer}>
+              <View style={styles.roleDot} />
+              <Text style={styles.userRole}>Admin</Text>
+            </View>
           </View>
         </View>
 
-        <View style={styles.drawerItemsContainer}>
-          <DrawerItemList {...props} />
+        {/* Navigation Items */}
+        <View style={styles.navContainer}>
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <TouchableOpacity
+                key={item.name}
+                style={[
+                  styles.navItem,
+                  item.active && styles.navItemActive,
+                ]}
+                onPress={() => {
+                  props.navigation.navigate(item.name);
+                  props.navigation.closeDrawer();
+                }}
+              >
+                <Icon
+                  size={22}
+                  color={item.active ? Theme.colors.primary : Theme.colors.onSurfaceVariant}
+                  strokeWidth={item.active ? 2 : 1.5}
+                />
+                <Text
+                  style={[
+                    styles.navText,
+                    item.active && styles.navTextActive,
+                  ]}
+                >
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
-        {/* --- Divider Placeholder (Tonal shift) --- */}
-        <View style={styles.tonalDivider} />
+        {/* Divider */}
+        <View style={styles.divider} />
 
-        {/* --- Language & Theme Toggles --- */}
-        <View style={styles.footerOptions}>
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionIcon}>
-              <Languages size={20} color={Theme.colors.onSurfaceVariant} />
-            </View>
-            <Text style={styles.optionText}>Bangla (বাংলা)</Text>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>EN</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionIcon}>
-              <Moon size={20} color={Theme.colors.onSurfaceVariant} />
-            </View>
-            <Text style={styles.optionText}>Dark Mode</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Settings */}
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => props.navigation.navigate('Settings')}
+        >
+          <Settings size={22} color={Theme.colors.onSurfaceVariant} strokeWidth={1.5} />
+          <Text style={styles.navText}>Settings</Text>
+        </TouchableOpacity>
       </DrawerContentScrollView>
 
-      {/* --- Logout Component --- */}
-      <TouchableOpacity 
+      {/* Footer / Version Info */}
+      <View style={styles.footer}>
+        <Text style={styles.versionText}>Masjid Pro v2.4.0</Text>
+      </View>
+
+      {/* Logout Component */}
+      <TouchableOpacity
         style={styles.logoutButton}
         onPress={() => {
-          // In a real app, integrate logout logic here
-          console.log('Logging out...');
+          props.navigation.closeDrawer();
+          // Handle logout
         }}
       >
         <LogOut size={20} color={Theme.colors.error} />
@@ -78,69 +165,140 @@ const CustomDrawerContent = (props) => {
 };
 
 const styles = StyleSheet.create({
-  profileHeader: {
-    padding: Theme.spacing.lg,
-    backgroundColor: Theme.colors.primary,
+  container: {
+    flex: 1,
+    backgroundColor: Theme.colors.surfaceContainerLowest,
+  },
+  scrollContent: {
+    paddingTop: 0,
+  },
+  topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Theme.spacing.md,
+    paddingHorizontal: Theme.spacing.lg,
+    paddingTop: Theme.spacing.lg,
+    gap: Theme.spacing.sm,
+  },
+  languageToggle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingVertical: Theme.spacing.md,
+    paddingHorizontal: Theme.spacing.xs,
+    borderRadius: Theme.roundness.xl,
+    backgroundColor: Theme.colors.surfaceContainerLow,
+    borderWidth: 1,
+    borderColor: 'rgba(194, 201, 187, 0.3)',
+  },
+  languageText: {
+    ...Theme.typography.labelSm,
+    fontSize: 11,
+    color: Theme.colors.primary,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  loginButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingVertical: Theme.spacing.md,
+    paddingHorizontal: Theme.spacing.xs,
+    borderRadius: Theme.roundness.xl,
+    backgroundColor: Theme.colors.primary,
+  },
+  loginButtonText: {
+    ...Theme.typography.labelSm,
+    fontSize: 11,
+    color: Theme.colors.onPrimary,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  profileHeader: {
+    paddingHorizontal: Theme.spacing.xl,
+    paddingVertical: Theme.spacing.xl,
   },
   avatarContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 72,
+    height: 72,
+    borderRadius: Theme.roundness.lg,
     backgroundColor: Theme.colors.primaryContainer,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: Theme.spacing.md,
   },
-  profileInfo: {
-    marginLeft: Theme.spacing.md,
-  },
+  profileInfo: {},
   userName: {
-    ...Theme.typography.titleMd,
-    color: Theme.colors.onPrimary,
+    ...Theme.typography.headlineMd,
+    color: Theme.colors.onSurface,
+    fontFamily: 'PlusJakartaSans_700Bold',
+  },
+  roleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  roleDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Theme.colors.tertiaryContainer,
+    marginRight: 6,
   },
   userRole: {
     ...Theme.typography.labelSm,
-    color: 'rgba(255,255,255,0.7)',
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    color: Theme.colors.onSurfaceVariant,
+    fontWeight: '600',
   },
-  drawerItemsContainer: {
-    flex: 1,
-    paddingHorizontal: Theme.spacing.sm,
+  navContainer: {
+    paddingHorizontal: Theme.spacing.md,
   },
-  tonalDivider: {
-    height: 1,
-    backgroundColor: Theme.colors.outlineVariant,
-    opacity: 0.2,
-    marginVertical: Theme.spacing.md,
-    marginHorizontal: Theme.spacing.lg,
-  },
-  footerOptions: {
-    paddingHorizontal: Theme.spacing.lg,
-  },
-  optionItem: {
+  navItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Theme.spacing.md,
+    paddingVertical: 14,
+    paddingHorizontal: Theme.spacing.md,
+    borderRadius: Theme.roundness.md,
+    marginVertical: 2,
   },
-  optionIcon: {
-    marginRight: Theme.spacing.md,
+  navItemActive: {
+    backgroundColor: 'rgba(27, 94, 32, 0.1)',
   },
-  optionText: {
+  navText: {
     ...Theme.typography.bodyMd,
-    color: Theme.colors.onSurface,
-    flex: 1,
-  },
-  badge: {
-    backgroundColor: Theme.colors.surfaceContainerHighest,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  badgeText: {
-    ...Theme.typography.labelSm,
-    fontSize: 9,
+    marginLeft: Theme.spacing.md,
     color: Theme.colors.onSurfaceVariant,
+    fontWeight: '500',
+    fontSize: 15,
+  },
+  navTextActive: {
+    color: Theme.colors.primary,
+    fontWeight: '700',
+  },
+  divider: {
+    height: Theme.spacing.xl,
+  },
+  footer: {
+    paddingHorizontal: Theme.spacing.xl,
+    paddingVertical: Theme.spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: Theme.colors.surfaceContainerLow,
+    backgroundColor: Theme.colors.surfaceContainerLowest,
+  },
+  versionText: {
+    ...Theme.typography.labelSm,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    color: Theme.colors.outline,
+    opacity: 0.5,
+    fontWeight: '600',
   },
   logoutButton: {
     flexDirection: 'row',
@@ -151,8 +309,9 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     ...Theme.typography.titleMd,
-    fontSize: 16,
+    fontSize: 15,
     color: Theme.colors.error,
+    fontWeight: '700',
     marginLeft: Theme.spacing.md,
   },
 });

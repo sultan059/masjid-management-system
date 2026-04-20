@@ -49,11 +49,11 @@ function AppDrawer() {
       }}
     >
       <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+      <Drawer.Screen name="Financials" component={PaymentsScreen} />
       <Drawer.Screen name="Inventory" component={InventoryScreen} />
-      <Drawer.Screen name="Payments" component={PaymentsScreen} />
-      <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-      <Drawer.Screen name="Events" component={EventsScreen} />
       <Drawer.Screen name="Reports" component={ReportsScreen} />
+      <Drawer.Screen name="Events" component={EventsScreen} />
+      <Drawer.Screen name="MosqueInfo" component={DashboardScreen} />
       <Drawer.Screen name="Transactions" component={TransactionsScreen} />
     </Drawer.Navigator>
   );
