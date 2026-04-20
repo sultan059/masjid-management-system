@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,6 @@ import {
 import {
   User,
   Settings,
-  LogOut,
   Languages,
   Moon,
   LayoutDashboard,
@@ -24,23 +23,33 @@ import {
   Calendar,
   Building2,
   X,
-  LogIn,
 } from 'lucide-react-native';
 import authService from '../services/authService';
 import { Theme } from '../theme/Theme';
 
 const menuItems = [
-  { name: 'Dashboard', label: 'Dashboard', icon: LayoutDashboard, active: true },
-  { name: 'Financials', label: 'Financials', icon: Wallet, active: false },
-  { name: 'Inventory', label: 'Inventory', icon: Package, active: false },
-  { name: 'Reports', label: 'Reports', icon: BarChart3, active: false },
-  { name: 'Events', label: 'Events', icon: Calendar, active: false },
-  { name: 'MosqueInfo', label: 'Mosque Information', icon: Building2, active: false },
+  { name: 'Dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { name: 'Financials', label: 'Financials', icon: Wallet },
+  { name: 'Inventory', label: 'Inventory', icon: Package },
+  { name: 'Reports', label: 'Reports', icon: BarChart3 },
+  { name: 'Events', label: 'Events', icon: Calendar },
+  { name: 'MosqueInfo', label: 'Mosque Information', icon: Building2 },
 ];
 
 const CustomDrawerContent = (props) => {
   const [language, setLanguage] = useState('en');
   const { onLogout } = props;
+  const [, forceUpdate] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('state', () => {
+      forceUpdate((n) => n + 1);
+    });
+    return unsubscribe;
+  }, [props.navigation]);
+
+  const drawerState = props.navigation.getState();
+  const activeRouteName = drawerState?.routes[drawerState?.index || 0]?.name || 'Dashboard';
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === 'en' ? 'bn' : 'en'));
@@ -73,14 +82,6 @@ const CustomDrawerContent = (props) => {
             <Languages size={14} color={Theme.colors.primary} />
             <Text style={styles.languageText}>EN | বাংলা</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={handleLogout}
-          >
-            <LogIn size={14} color={Theme.colors.onPrimary} />
-            <Text style={styles.loginButtonText}>Logout</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Profile Header Section */}
@@ -101,12 +102,13 @@ const CustomDrawerContent = (props) => {
         <View style={styles.navContainer}>
           {menuItems.map((item) => {
             const Icon = item.icon;
+            const isActive = activeRouteName === item.name;
             return (
               <TouchableOpacity
                 key={item.name}
                 style={[
                   styles.navItem,
-                  item.active && styles.navItemActive,
+                  isActive && styles.navItemActive,
                 ]}
                 onPress={() => {
                   props.navigation.navigate(item.name);
@@ -115,13 +117,13 @@ const CustomDrawerContent = (props) => {
               >
                 <Icon
                   size={22}
-                  color={item.active ? Theme.colors.primary : Theme.colors.onSurfaceVariant}
-                  strokeWidth={item.active ? 2 : 1.5}
+                  color={isActive ? Theme.colors.primary : Theme.colors.onSurfaceVariant}
+                  strokeWidth={isActive ? 2 : 1.5}
                 />
                 <Text
                   style={[
                     styles.navText,
-                    item.active && styles.navTextActive,
+                    isActive && styles.navTextActive,
                   ]}
                 >
                   {item.label}
@@ -144,22 +146,6 @@ const CustomDrawerContent = (props) => {
         </TouchableOpacity>
       </DrawerContentScrollView>
 
-      {/* Footer / Version Info */}
-      <View style={styles.footer}>
-        <Text style={styles.versionText}>Masjid Pro v2.4.0</Text>
-      </View>
-
-      {/* Logout Component */}
-      <TouchableOpacity
-        style={styles.logoutButton}
-        onPress={() => {
-          props.navigation.closeDrawer();
-          // Handle logout
-        }}
-      >
-        <LogOut size={20} color={Theme.colors.error} />
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -196,24 +182,6 @@ const styles = StyleSheet.create({
     ...Theme.typography.labelSm,
     fontSize: 11,
     color: Theme.colors.primary,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  loginButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    paddingVertical: Theme.spacing.md,
-    paddingHorizontal: Theme.spacing.xs,
-    borderRadius: Theme.roundness.xl,
-    backgroundColor: Theme.colors.primary,
-  },
-  loginButtonText: {
-    ...Theme.typography.labelSm,
-    fontSize: 11,
-    color: Theme.colors.onPrimary,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
@@ -299,20 +267,6 @@ const styles = StyleSheet.create({
     color: Theme.colors.outline,
     opacity: 0.5,
     fontWeight: '600',
-  },
-  logoutButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Theme.spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: Theme.colors.surfaceContainerLow,
-  },
-  logoutText: {
-    ...Theme.typography.titleMd,
-    fontSize: 15,
-    color: Theme.colors.error,
-    fontWeight: '700',
-    marginLeft: Theme.spacing.md,
   },
 });
 

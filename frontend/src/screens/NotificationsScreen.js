@@ -12,6 +12,7 @@ import {
 import { Bell, MessageSquare, Info, AlertTriangle, ChevronRight, Check, Menu } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
+import BottomNav from '../components/BottomNav';
 import notificationService from '../services/notificationService';
 
 const NotificationsScreen = () => {
@@ -121,8 +122,10 @@ const NotificationsScreen = () => {
             )}
           </View>
         )}
-        ListFooterComponent={<View style={{ height: 40 }} />}
+        ListFooterComponent={<View style={{ height: 100 }} />}
       />
+
+      <BottomNav />
     </SafeAreaView>
   );
 };

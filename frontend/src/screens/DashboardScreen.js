@@ -23,6 +23,7 @@ import {
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
+import BottomNav from '../components/BottomNav';
 import dashboardService from '../services/dashboardService';
 
 const DashboardScreen = () => {
@@ -235,6 +236,8 @@ const DashboardScreen = () => {
         </View>
 
       </ScrollView>
+
+      <BottomNav />
     </SafeAreaView>
   );
 };

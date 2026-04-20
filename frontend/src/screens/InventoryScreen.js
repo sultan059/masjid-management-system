@@ -12,6 +12,7 @@ import {
 import { Package, MoreVertical, Plus, Filter, Search, Menu } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
+import BottomNav from '../components/BottomNav';
 import inventoryService from '../services/inventoryService';
 
 const InventoryScreen = () => {
@@ -139,6 +140,8 @@ const InventoryScreen = () => {
       <TouchableOpacity style={styles.fab}>
         <Plus size={28} color={Theme.colors.onPrimary} />
       </TouchableOpacity>
+
+      <BottomNav />
     </SafeAreaView>
   );
 };

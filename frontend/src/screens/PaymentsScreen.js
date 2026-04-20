@@ -13,6 +13,7 @@ import {
 import { CreditCard, DollarSign, ArrowUpRight, ArrowDownLeft, ChevronRight, Plus, Menu } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
+import BottomNav from '../components/BottomNav';
 import donationService from '../services/donationService';
 import transactionService from '../services/transactionService';
 
@@ -178,6 +179,8 @@ const PaymentsScreen = () => {
             </TouchableOpacity>
         </ScrollView>
       </ScrollView>
+
+      <BottomNav />
     </SafeAreaView>
   );
 };

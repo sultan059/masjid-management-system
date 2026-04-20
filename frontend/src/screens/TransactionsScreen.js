@@ -13,6 +13,7 @@ import {
 import { Search, Filter, MoreHorizontal, Download, Menu } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
+import BottomNav from '../components/BottomNav';
 import transactionService from '../services/transactionService';
 
 const TransactionsScreen = () => {
@@ -143,6 +144,8 @@ const TransactionsScreen = () => {
            </View>
         )}
       />
+
+      <BottomNav />
     </SafeAreaView>
   );
 };

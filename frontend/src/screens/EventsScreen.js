@@ -13,6 +13,7 @@ import {
 import { Calendar, Clock, MapPin, Users, ChevronRight, Plus, Menu } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
+import BottomNav from '../components/BottomNav';
 import eventService from '../services/eventService';
 
 const EventsScreen = () => {
@@ -160,6 +161,8 @@ const EventsScreen = () => {
       <TouchableOpacity style={styles.fab}>
         <Plus size={28} color={Theme.colors.onPrimary} />
       </TouchableOpacity>
+
+      <BottomNav />
     </SafeAreaView>
   );
 };
