@@ -13,20 +13,21 @@ import {
 import {
   Bell,
   Menu,
-  Search,
   Heart,
   Clock,
   Calendar,
   ChevronRight,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  LogIn,
+  Building2
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
 import dashboardService from '../services/dashboardService';
 
-const DashboardScreen = () => {
+const DashboardScreen = ({ isAuthenticated = false }) => {
   const navigation = useNavigation();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -45,8 +46,13 @@ const DashboardScreen = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (isAuthenticated) {
+      fetchData();
+    } else {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, [isAuthenticated]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -82,22 +88,36 @@ const DashboardScreen = () => {
       {/* --- Header: Ultra Compact --- */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
-            <Menu size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
-          </TouchableOpacity>
+          {isAuthenticated && (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
+              <Menu size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
+            </TouchableOpacity>
+          )}
+          <View style={styles.logoIcon}>
+            <Building2 size={22} color={Theme.colors.primary} strokeWidth={1.5} />
+          </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.greeting}>Masjid Management System</Text>
             <Text style={styles.mosqueName}>Professional Masjid Manager</Text>
           </View>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.iconButton}>
-            <Search size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.iconButton, styles.notificationBadge]}>
-            <Bell size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-            <View style={styles.badge} />
-          </TouchableOpacity>
+          {isAuthenticated && (
+            <TouchableOpacity style={[styles.iconButton, styles.notificationBadge]}>
+              <Bell size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+              <View style={styles.badge} />
+            </TouchableOpacity>
+          )}
+          {!isAuthenticated && (
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => navigation.navigate('Login')}
+              activeOpacity={0.7}
+            >
+              <LogIn size={16} color="#ffffff" strokeWidth={2} />
+              <Text style={styles.loginButtonText}>Login</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -218,26 +238,28 @@ const DashboardScreen = () => {
         </View>
 
         {/* --- Stats Band --- */}
-        <View style={styles.statsBand}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats?.musallis || 0}</Text>
-            <Text style={styles.statLabel}>MUSALLIS</Text>
+        {isAuthenticated && (
+          <View style={styles.statsBand}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{stats?.musallis || 0}</Text>
+              <Text style={styles.statLabel}>MUSALLIS</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>৳ {stats?.weeklyIncome?.toLocaleString() || balance?.weekly?.toLocaleString() || 0}</Text>
+              <Text style={styles.statLabel}>THIS WEEK</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{stats?.eventsCount || 0}</Text>
+              <Text style={styles.statLabel}>EVENTS</Text>
+            </View>
           </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>৳ {stats?.weeklyIncome?.toLocaleString() || balance?.weekly?.toLocaleString() || 0}</Text>
-            <Text style={styles.statLabel}>THIS WEEK</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats?.eventsCount || 0}</Text>
-            <Text style={styles.statLabel}>EVENTS</Text>
-          </View>
-        </View>
+        )}
 
       </ScrollView>
 
-      <BottomNav />
+      <BottomNav isAuthenticated={isAuthenticated} />
     </SafeAreaView>
   );
 };
@@ -280,6 +302,21 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: Theme.spacing.xs,
     marginLeft: Theme.spacing.sm,
+  },
+  loginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Theme.colors.primary,
+    paddingHorizontal: Theme.spacing.md,
+    paddingVertical: Theme.spacing.sm,
+    borderRadius: Theme.roundness.md,
+    gap: 6,
+  },
+  loginButtonText: {
+    ...Theme.typography.labelSm,
+    color: '#ffffff',
+    fontWeight: '700',
+    fontSize: 13,
   },
   notificationBadge: {
     position: 'relative',

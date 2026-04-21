@@ -29,13 +29,14 @@ import NotificationsScreen from './src/screens/NotificationsScreen';
 import ReportsScreen from './src/screens/ReportsScreen';
 import TransactionsScreen from './src/screens/TransactionsScreen';
 import EventsScreen from './src/screens/EventsScreen';
+import ReadQuranScreen from './src/screens/ReadQuranScreen';
 
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-function AppDrawer({ onLogout }) {
+function AppDrawer({ onLogout, isAuthenticated }) {
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} onLogout={onLogout} />}
@@ -48,12 +49,17 @@ function AppDrawer({ onLogout }) {
         sceneContainerStyle: { backgroundColor: Theme.colors.background },
       }}
     >
-      <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+      <Drawer.Screen name="Dashboard">
+        {(props) => <DashboardScreen {...props} isAuthenticated={true} />}
+      </Drawer.Screen>
       <Drawer.Screen name="Financials" component={PaymentsScreen} />
+      <Drawer.Screen name="ReadQuran" component={ReadQuranScreen} />
       <Drawer.Screen name="Inventory" component={InventoryScreen} />
       <Drawer.Screen name="Reports" component={ReportsScreen} />
       <Drawer.Screen name="Events" component={EventsScreen} />
-      <Drawer.Screen name="MosqueInfo" component={DashboardScreen} />
+      <Drawer.Screen name="MosqueInfo">
+        {(props) => <DashboardScreen {...props} isAuthenticated={true} />}
+      </Drawer.Screen>
       <Drawer.Screen name="Transactions" component={TransactionsScreen} />
     </Drawer.Navigator>
   );
@@ -62,6 +68,7 @@ function AppDrawer({ onLogout }) {
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
+  const navigationRef = React.useRef(null);
 
   const [fontsLoaded] = useFonts({
     PlusJakartaSans_700Bold,
@@ -80,6 +87,18 @@ export default function App() {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    if (!authLoading && navigationRef.current) {
+      const currentRoute = navigationRef.current.getCurrentRoute();
+      if (isAuthenticated && currentRoute?.name !== 'Main') {
+        navigationRef.current.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
+      }
+    }
+  }, [authLoading, isAuthenticated]);
+
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded && !authLoading) {
       await SplashScreen.hideAsync();
@@ -95,18 +114,18 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
+    <NavigationContainer ref={navigationRef} onReady={onLayoutRootView}>
       <StatusBar style="dark" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!isAuthenticated ? (
-          <Stack.Screen name="Login">
-            {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
-          </Stack.Screen>
-        ) : (
-          <Stack.Screen name="Main">
-            {(props) => <AppDrawer {...props} onLogout={() => setIsAuthenticated(false)} />}
-          </Stack.Screen>
-        )}
+        <Stack.Screen name="DashboardUnauth">
+          {(props) => <DashboardScreen {...props} isAuthenticated={false} />}
+        </Stack.Screen>
+        <Stack.Screen name="Login">
+          {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
+        </Stack.Screen>
+        <Stack.Screen name="Main">
+          {(props) => <AppDrawer {...props} onLogout={() => setIsAuthenticated(false)} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

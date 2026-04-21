@@ -23,6 +23,7 @@ import {
   Calendar,
   Building2,
   X,
+  LogOut,
 } from 'lucide-react-native';
 import authService from '../services/authService';
 import { Theme } from '../theme/Theme';

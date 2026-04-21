@@ -1,12 +1,16 @@
 import api from './api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const TOKEN_EXPIRY_KEY = 'tokenExpiry';
+const TOKEN_EXPIRY_MS = 24 * 60 * 60 * 1000;
+
 const authService = {
   login: async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password });
       if (response.data.token) {
         await AsyncStorage.setItem('token', response.data.token);
+        await AsyncStorage.setItem('tokenExpiry', (Date.now() + TOKEN_EXPIRY_MS).toString());
         await AsyncStorage.setItem('user', JSON.stringify(response.data.user || { email }));
       }
       return response.data;
@@ -17,6 +21,7 @@ const authService = {
 
   logout: async () => {
     await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('tokenExpiry');
     await AsyncStorage.removeItem('user');
   },
 
@@ -27,7 +32,9 @@ const authService = {
 
   isAuthenticated: async () => {
     const token = await AsyncStorage.getItem('token');
-    return !!token;
+    const expiry = await AsyncStorage.getItem('tokenExpiry');
+    if (!token || !expiry) return false;
+    return Date.now() < parseInt(expiry);
   }
 };
 

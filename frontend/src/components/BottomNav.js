@@ -1,18 +1,20 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Home, Wallet, CreditCard, Package, User } from 'lucide-react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useNavigation, useRoute, DrawerActions } from '@react-navigation/native';
+import { Home, Wallet, CreditCard, Package, User, BookOpen } from 'lucide-react-native';
 import { Theme } from '../theme/Theme';
 
-const navItems = [
+const navItemsAll = [
   { name: 'Dashboard', label: 'Home', icon: Home },
+  { name: 'ReadQuran', label: 'Read Quran', icon: BookOpen },
   { name: 'Transactions', label: 'Transactions', icon: Wallet },
   { name: 'Financials', label: 'Payments', icon: CreditCard },
   { name: 'Inventory', label: 'Inventory', icon: Package },
   { name: 'MosqueInfo', label: 'Profile', icon: User },
 ];
 
-const BottomNav = () => {
+const BottomNav = ({ isAuthenticated = false }) => {
+  const navItems = navItemsAll;
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -29,9 +31,31 @@ const BottomNav = () => {
     return itemName === activeRoute;
   };
 
+  const canNavigate = (itemName) => {
+    if (!isAuthenticated && !['Dashboard', 'ReadQuran'].includes(itemName)) {
+      Alert.alert('Login Required', 'Please login to access this feature.');
+      return false;
+    }
+    return true;
+  };
+
+  const handleNavigation = (itemName) => {
+    if (activeRoute === itemName) return;
+    if (!canNavigate(itemName)) return;
+    navigation.dispatch(DrawerActions.jumpTo(itemName));
+  };
+
+  const navInnerStyle = {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    gap: 0,
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.navInner}>
+      <View style={navInnerStyle}>
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.name);
@@ -39,11 +63,7 @@ const BottomNav = () => {
             <TouchableOpacity
               key={item.name}
               style={styles.navItem}
-              onPress={() => {
-                if (!active) {
-                  navigation.navigate(item.name);
-                }
-              }}
+              onPress={() => handleNavigation(item.name)}
               activeOpacity={0.7}
             >
               <View style={[styles.iconContainer, active && styles.iconContainerActive]}>
@@ -76,12 +96,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#e4e4e7',
     paddingBottom: 28,
     paddingTop: 12,
-  },
-  navInner: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 4,
   },
   navItem: {
     alignItems: 'center',

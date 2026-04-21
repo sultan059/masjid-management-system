@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import { 
-  StyleSheet, 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  KeyboardAvoidingView, 
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
   Platform,
   Dimensions,
   ActivityIndicator
 } from 'react-native';
 import { Mail, Lock, LogIn, ChevronRight, AlertCircle } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import authService from '../services/authService';
 
 const LoginScreen = ({ onLogin }) => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +32,11 @@ const LoginScreen = ({ onLogin }) => {
     setError(null);
     try {
       await authService.login(email, password);
-      onLogin(); // Trigger navigation to main app
+      onLogin(); // Trigger state update
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
     } catch (err) {
       setError(err.toString());
     } finally {
