@@ -62,17 +62,25 @@ const BottomNav = ({ isAuthenticated = false }) => {
           return (
             <TouchableOpacity
               key={item.name}
+<<<<<<< HEAD
               style={styles.navItem}
               onPress={() => handleNavigation(item.name)}
+=======
+              style={[styles.navItem, active && styles.navItemActive]}
+              onPress={() => {
+                if (!active) {
+                  navigation.navigate(item.name);
+                }
+              }}
+>>>>>>> 83d27b5219a5c9c59de13ef12ad2390de85f7b01
               activeOpacity={0.7}
             >
-              <View style={[styles.iconContainer, active && styles.iconContainerActive]}>
+              <View style={styles.iconContainer}>
                 <Icon
                   size={22}
                   color={active ? Theme.colors.primary : '#71717a'}
                   strokeWidth={active ? 2 : 1.5}
                 />
-                {active && <View style={styles.activeDot} />}
               </View>
               <Text style={[styles.label, active && styles.labelActive]}>
                 {item.label}
@@ -103,6 +111,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
+  navItemActive: {
+    backgroundColor: 'rgba(27, 94, 32, 0.1)',
+    borderRadius: 8,
+  },
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -110,14 +122,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   iconContainerActive: {},
-  activeDot: {
-    position: 'absolute',
-    bottom: -6,
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: Theme.colors.primary,
-  },
   label: {
     fontFamily: 'BeVietnamPro_400Regular',
     fontSize: 10,
