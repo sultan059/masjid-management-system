@@ -8,7 +8,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  Image as RNImage
 } from 'react-native';
 import { Mail, Lock, LogIn, ChevronRight, AlertCircle } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -52,11 +53,8 @@ const LoginScreen = ({ onLogin }) => {
       <View style={styles.content}>
         {/* --- Branding Section --- */}
         <View style={styles.branding}>
-          <View style={styles.logoPlaceholder}>
-             <LogIn size={40} color={Theme.colors.onPrimary} strokeWidth={1.5} />
-          </View>
+          <RNImage source={require('../../assets/logo.png')} style={styles.logoImage} />
           <Text style={styles.appName}>Masjid Management System</Text>
-          <Text style={styles.appSubtitle}>Professional Masjid Manager</Text>
         </View>
 
         {/* --- Login Form --- */}
@@ -104,7 +102,7 @@ const LoginScreen = ({ onLogin }) => {
             </View>
           )}
 
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.loginButton, loading && { opacity: 0.7 }]}
             onPress={handleLogin}
             disabled={loading}
@@ -146,17 +144,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Theme.spacing.xxl,
   },
-  logoPlaceholder: {
-    width: 80,
-    height: 80,
-    borderRadius: Theme.roundness.xl,
-    backgroundColor: Theme.colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...Theme.shadows.ambient,
+  logoImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
   },
   appName: {
     ...Theme.typography.headlineMd,
+    fontSize: 26,
     color: Theme.colors.onSurface,
     marginTop: Theme.spacing.lg,
   },

@@ -17,7 +17,11 @@
       "Bash(netstat -ano)",
       "Bash(npx expo *)",
       "Bash(taskkill //F //IM node.exe)",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(xargs grep *)",
+      "Read(//d/react_native_proj/masjid-management-system/frontend/**)",
+      "Bash(npm start *)",
+      "Bash(timeout 30 bash *)"
     ]
   }
 }

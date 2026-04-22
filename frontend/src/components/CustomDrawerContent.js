@@ -60,9 +60,12 @@ const CustomDrawerContent = (props) => {
     try {
       await authService.logout();
       props.navigation.closeDrawer();
-      if (onLogout) {
-        setTimeout(() => onLogout(), 300);
-      }
+      setTimeout(() => {
+        if (onLogout) {
+          onLogout();
+        }
+        props.navigation.navigate('DashboardUnauth');
+      }, 300);
     } catch (error) {
       Alert.alert('Error', 'Failed to logout. Please try again.');
     }
@@ -145,6 +148,22 @@ const CustomDrawerContent = (props) => {
           <Settings size={22} color={Theme.colors.onSurfaceVariant} strokeWidth={1.5} />
           <Text style={styles.navText}>Settings</Text>
         </TouchableOpacity>
+
+        {/* Divider */}
+        <View style={styles.divider} />
+
+        {/* Logout Button */}
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={handleLogout}
+          activeOpacity={0.7}
+        >
+          <LogOut size={22} color={Theme.colors.error} strokeWidth={1.5} />
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+
+        {/* Bottom Spacer */}
+        <View style={styles.bottomSpacer} />
       </DrawerContentScrollView>
 
     </SafeAreaView>
@@ -252,6 +271,26 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: Theme.spacing.xl,
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: Theme.spacing.md,
+    marginHorizontal: Theme.spacing.md,
+    borderRadius: Theme.roundness.md,
+    marginTop: Theme.spacing.xl,
+    backgroundColor: 'rgba(186, 26, 26, 0.1)',
+  },
+  logoutText: {
+    ...Theme.typography.bodyMd,
+    marginLeft: Theme.spacing.md,
+    color: Theme.colors.error,
+    fontWeight: '600',
+    fontSize: 15,
+  },
+  bottomSpacer: {
+    height: Theme.spacing.xxl,
   },
   footer: {
     paddingHorizontal: Theme.spacing.xl,

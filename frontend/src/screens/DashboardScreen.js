@@ -6,10 +6,10 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
-  Image,
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
+import { Image as RNImage } from 'react-native';
 import {
   Bell,
   Menu,
@@ -19,16 +19,15 @@ import {
   ChevronRight,
   TrendingUp,
   AlertCircle,
-  LogIn,
-  Building2
+  LogIn
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
 import dashboardService from '../services/dashboardService';
 
-const DashboardScreen = ({ isAuthenticated = false }) => {
-  const navigation = useNavigation();
+const DashboardScreen = ({ isAuthenticated = false, navigation }) => {
+  const nav = useNavigation();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -87,38 +86,33 @@ const DashboardScreen = ({ isAuthenticated = false }) => {
     <SafeAreaView style={styles.container}>
       {/* --- Header: Ultra Compact --- */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          {isAuthenticated && (
-            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
-              <Menu size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
-            </TouchableOpacity>
-          )}
-          <View style={styles.logoIcon}>
-            <Building2 size={22} color={Theme.colors.primary} strokeWidth={1.5} />
-          </View>
+        {isAuthenticated && (
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
+            <Menu size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
+          </TouchableOpacity>
+        )}
+        <View style={styles.headerCenter}>
+          <RNImage source={require('../../assets/logo.png')} style={styles.headerLogo} />
           <View style={styles.headerTextContainer}>
-            <Text style={styles.greeting}>Masjid Management System</Text>
-            <Text style={styles.mosqueName}>Professional Masjid Manager</Text>
+            <Text style={styles.greeting}>Masjid (Mosque)</Text>
+            <Text style={styles.greeting}>Management System</Text>
           </View>
         </View>
-        <View style={styles.headerRight}>
-          {isAuthenticated && (
-            <TouchableOpacity style={[styles.iconButton, styles.notificationBadge]}>
-              <Bell size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-              <View style={styles.badge} />
-            </TouchableOpacity>
-          )}
-          {!isAuthenticated && (
-            <TouchableOpacity
-              style={styles.loginButton}
-              onPress={() => navigation.navigate('Login')}
-              activeOpacity={0.7}
-            >
-              <LogIn size={16} color="#ffffff" strokeWidth={2} />
-              <Text style={styles.loginButtonText}>Login</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        {!isAuthenticated && (
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => nav.navigate('Login')}
+            activeOpacity={0.7}
+          >
+            <RNImage source={require('../../assets/login-icon.png')} style={styles.loginButtonImage} />
+          </TouchableOpacity>
+        )}
+        {isAuthenticated && (
+          <TouchableOpacity style={[styles.iconButton, styles.notificationBadge]}>
+            <Bell size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+            <View style={styles.badge} />
+          </TouchableOpacity>
+        )}
       </View>
 
       <ScrollView
@@ -259,7 +253,13 @@ const DashboardScreen = ({ isAuthenticated = false }) => {
 
       </ScrollView>
 
-      <BottomNav isAuthenticated={isAuthenticated} />
+      {isAuthenticated ? (
+        <BottomNav isAuthenticated={isAuthenticated} />
+      ) : (
+        <View style={styles.bottomCopyright}>
+          <Text style={styles.copyrightText}>© 2026 Masjid Management System. All rights reserved.</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -278,19 +278,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: Theme.spacing.lg,
     paddingVertical: Theme.spacing.md,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  headerLeft: {
+  headerCenter: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   headerTextContainer: {
-    marginLeft: Theme.spacing.md,
+    alignItems: 'center',
+  },
+  headerLogo: {
+    width: 28,
+    height: 28,
+    marginRight: Theme.spacing.sm,
+    resizeMode: 'contain',
   },
   greeting: {
     ...Theme.typography.labelSm,
+    fontSize: 14,
     color: Theme.colors.onSurfaceVariant,
+    lineHeight: 18,
+    textAlign: 'center',
   },
   mosqueName: {
     ...Theme.typography.titleMd,
@@ -301,22 +312,18 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: Theme.spacing.xs,
-    marginLeft: Theme.spacing.sm,
   },
   loginButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Theme.colors.primary,
-    paddingHorizontal: Theme.spacing.md,
-    paddingVertical: Theme.spacing.sm,
-    borderRadius: Theme.roundness.md,
-    gap: 6,
+    position: 'absolute',
+    right: Theme.spacing.lg,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
   },
-  loginButtonText: {
-    ...Theme.typography.labelSm,
-    color: '#ffffff',
-    fontWeight: '700',
-    fontSize: 13,
+  loginButtonImage: {
+    width: 56,
+    height: 24,
+    resizeMode: 'contain',
   },
   notificationBadge: {
     position: 'relative',
@@ -534,6 +541,20 @@ const styles = StyleSheet.create({
     height: 30,
     backgroundColor: Theme.colors.outlineVariant,
     opacity: 0.5,
+  },
+  bottomCopyright: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Theme.spacing.md,
+    backgroundColor: Theme.colors.background,
+    borderTopWidth: 1,
+    borderTopColor: Theme.colors.outline,
+  },
+  copyrightText: {
+    ...Theme.typography.bodyMd,
+    color: Theme.colors.onSurfaceVariant,
+    textAlign: 'center',
   }
 });
 

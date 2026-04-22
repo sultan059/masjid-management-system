@@ -6,7 +6,7 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
-  ImageBackground,
+  ImageBackground as RnImageBackground,
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
@@ -87,7 +87,7 @@ const EventsScreen = () => {
         {/* --- Featured Event --- */}
         {featuredEvents.length > 0 && (
           <TouchableOpacity style={styles.featuredCard}>
-            <ImageBackground
+            <RnImageBackground
               source={{ uri: featuredEvents[0].imageUrl || 'https://images.unsplash.com/photo-1542834759-4091398f7739?auto=format&fit=crop&q=80&w=400' }}
               style={styles.featuredImage}
               imageStyle={{ borderRadius: Theme.roundness.xl }}
@@ -108,7 +108,7 @@ const EventsScreen = () => {
                    </View>
                 </View>
               </View>
-            </ImageBackground>
+            </RnImageBackground>
           </TouchableOpacity>
         )}
 
