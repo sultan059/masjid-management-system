@@ -19,7 +19,8 @@ import {
   ChevronRight,
   TrendingUp,
   AlertCircle,
-  LogIn
+  LogIn,
+  BookOpen
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
@@ -190,46 +191,72 @@ const DashboardScreen = ({ isAuthenticated = false, navigation }) => {
           </View>
         </TouchableOpacity>
 
-        {/* --- Recent Announcements --- */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Announcements</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAll}>See All</Text>
-          </TouchableOpacity>
-        </View>
+        {/* --- Recent Announcements (Logged In) OR Read Quran (Not Logged In) --- */}
+        {isAuthenticated ? (
+          <>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Announcements</Text>
+              <TouchableOpacity>
+                <Text style={styles.seeAll}>See All</Text>
+              </TouchableOpacity>
+            </View>
 
-        <View style={styles.listContainer}>
-          {announcements && announcements.length > 0 ? (
-            announcements.slice(0, 5).map((item, index) => (
-              <TouchableOpacity key={item.id || index} style={styles.listItem}>
-                <View style={styles.listItemIcon}>{getIconForType(item.icon)}</View>
-                <View style={styles.listItemContent}>
-                  <Text style={styles.listItemTitle}>{item.title}</Text>
-                  <Text style={styles.listItemDesc}>{item.description}</Text>
-                  <Text style={styles.listItemTime}>{item.timeAgo}</Text>
-                </View>
-                <ChevronRight size={20} color={Theme.colors.outline} />
+            <View style={styles.listContainer}>
+              {announcements && announcements.length > 0 ? (
+                announcements.slice(0, 5).map((item, index) => (
+                  <TouchableOpacity key={item.id || index} style={styles.listItem}>
+                    <View style={styles.listItemIcon}>{getIconForType(item.icon)}</View>
+                    <View style={styles.listItemContent}>
+                      <Text style={styles.listItemTitle}>{item.title}</Text>
+                      <Text style={styles.listItemDesc}>{item.description}</Text>
+                      <Text style={styles.listItemTime}>{item.timeAgo}</Text>
+                    </View>
+                    <ChevronRight size={20} color={Theme.colors.outline} />
+                  </TouchableOpacity>
+                ))
+              ) : (
+                [
+                  { title: 'Friday Khutbah Topic', desc: 'The Importance of Zakat in Community Building', time: '2h ago', icon: 'info' },
+                  { title: 'New Bangla Class', desc: 'Registration open for Saturday morning kids classes', time: '5h ago', icon: 'trending' },
+                ].map((item, index) => (
+                  <TouchableOpacity key={index} style={styles.listItem}>
+                    <View style={styles.listItemIcon}>
+                      <Calendar color={Theme.colors.primary} size={20} />
+                    </View>
+                    <View style={styles.listItemContent}>
+                      <Text style={styles.listItemTitle}>{item.title}</Text>
+                      <Text style={styles.listItemDesc}>{item.desc}</Text>
+                      <Text style={styles.listItemTime}>{item.time}</Text>
+                    </View>
+                    <ChevronRight size={20} color={Theme.colors.outline} />
+                  </TouchableOpacity>
+                ))
+              )}
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Read Quran</Text>
+              <TouchableOpacity>
+                <Text style={styles.seeAll}>Explore</Text>
               </TouchableOpacity>
-            ))
-          ) : (
-            [
-              { title: 'Friday Khutbah Topic', desc: 'The Importance of Zakat in Community Building', time: '2h ago', icon: 'info' },
-              { title: 'New Bangla Class', desc: 'Registration open for Saturday morning kids classes', time: '5h ago', icon: 'trending' },
-            ].map((item, index) => (
-              <TouchableOpacity key={index} style={styles.listItem}>
-                <View style={styles.listItemIcon}>
-                  <Calendar color={Theme.colors.primary} size={20} />
+            </View>
+
+            <TouchableOpacity style={styles.quranCard}>
+              <View style={styles.quranContent}>
+                <View style={styles.quranIconContainer}>
+                  <BookOpen size={28} color={Theme.colors.primary} />
                 </View>
-                <View style={styles.listItemContent}>
-                  <Text style={styles.listItemTitle}>{item.title}</Text>
-                  <Text style={styles.listItemDesc}>{item.desc}</Text>
-                  <Text style={styles.listItemTime}>{item.time}</Text>
+                <View style={styles.quranTextContainer}>
+                  <Text style={styles.quranTitle}>Explore the Holy Quran</Text>
+                  <Text style={styles.quranSubtitle}>Read, reflect, and connect with the word of Allah</Text>
                 </View>
-                <ChevronRight size={20} color={Theme.colors.outline} />
-              </TouchableOpacity>
-            ))
-          )}
-        </View>
+                <ChevronRight size={24} color={Theme.colors.outline} />
+              </View>
+            </TouchableOpacity>
+          </>
+        )}
 
         {/* --- Stats Band --- */}
         {isAuthenticated && (
@@ -450,6 +477,39 @@ const styles = StyleSheet.create({
     paddingVertical: Theme.spacing.sm,
     borderRadius: Theme.roundness.md,
     marginLeft: Theme.spacing.sm,
+  },
+  quranCard: {
+    marginHorizontal: Theme.spacing.lg,
+    backgroundColor: Theme.colors.surfaceContainerLow,
+    borderRadius: Theme.roundness.lg,
+    padding: Theme.spacing.lg,
+    ...Theme.shadows.ambient,
+  },
+  quranContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  quranIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(76, 111, 163, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  quranTextContainer: {
+    flex: 1,
+    marginLeft: Theme.spacing.md,
+  },
+  quranTitle: {
+    ...Theme.typography.titleMd,
+    color: Theme.colors.onSurface,
+  },
+  quranSubtitle: {
+    ...Theme.typography.bodyMd,
+    fontSize: 12,
+    color: Theme.colors.onSurfaceVariant,
+    marginTop: 4,
   },
   goldButtonText: {
     ...Theme.typography.labelSm,
