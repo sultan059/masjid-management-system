@@ -53,7 +53,9 @@ function AppDrawer({ onLogout, isAuthenticated }) {
         {(props) => <DashboardScreen {...props} isAuthenticated={true} />}
       </Drawer.Screen>
       <Drawer.Screen name="Financials" component={PaymentsScreen} />
-      <Drawer.Screen name="ReadQuran" component={ReadQuranScreen} />
+      <Drawer.Screen name="ReadQuran">
+        {(props) => <ReadQuranScreen {...props} isAuthenticated={true} />}
+      </Drawer.Screen>
       <Drawer.Screen name="Inventory" component={InventoryScreen} />
       <Drawer.Screen name="Reports" component={ReportsScreen} />
       <Drawer.Screen name="Events" component={EventsScreen} />
@@ -122,6 +124,9 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="Login">
           {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
+        </Stack.Screen>
+        <Stack.Screen name="ReadQuran">
+          {(props) => <ReadQuranScreen {...props} isAuthenticated={false} />}
         </Stack.Screen>
         <Stack.Screen name="Main">
           {(props) => <AppDrawer {...props} onLogout={() => setIsAuthenticated(false)} />}

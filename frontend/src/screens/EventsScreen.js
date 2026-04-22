@@ -14,6 +14,7 @@ import { Calendar, Clock, MapPin, Users, ChevronRight, Plus, Menu } from 'lucide
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
+import CustomHeader from '../components/CustomHeader';
 import eventService from '../services/eventService';
 
 const EventsScreen = () => {
@@ -68,15 +69,14 @@ const EventsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
-          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Events</Text>
-        <TouchableOpacity style={styles.headerIcon}>
-           <Calendar size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
-        </TouchableOpacity>
-      </View>
+      <CustomHeader 
+        title="Events" 
+        rightComponent={
+          <TouchableOpacity>
+             <Calendar size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}

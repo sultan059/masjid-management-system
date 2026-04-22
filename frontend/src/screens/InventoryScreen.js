@@ -13,6 +13,7 @@ import { Package, MoreVertical, Plus, Filter, Search, Menu } from 'lucide-react-
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
+import CustomHeader from '../components/CustomHeader';
 import inventoryService from '../services/inventoryService';
 
 const InventoryScreen = () => {
@@ -83,21 +84,19 @@ const InventoryScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* --- Filter & Header --- */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
-          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Inventory</Text>
-        <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.headerIcon}>
-            <Search size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headerIcon}>
-            <Filter size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <CustomHeader 
+        title="Inventory" 
+        rightComponent={
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity style={{ padding: 8 }}>
+              <Search size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ padding: 8, marginLeft: 4 }}>
+              <Filter size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+            </TouchableOpacity>
+          </View>
+        }
+      />
 
       <FlatList
         data={inventoryItems}

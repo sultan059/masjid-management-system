@@ -243,7 +243,7 @@ const DashboardScreen = ({ isAuthenticated = false, navigation }) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.quranCard}>
+            <TouchableOpacity style={styles.quranCard} onPress={() => nav.navigate('ReadQuran')}>
               <View style={styles.quranContent}>
                 <View style={styles.quranIconContainer}>
                   <BookOpen size={28} color={Theme.colors.primary} />

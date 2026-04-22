@@ -10,9 +10,10 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
-import { Search, Filter, MoreHorizontal, Download, Menu } from 'lucide-react-native';
+import { Search, Filter, MoreHorizontal, Download } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
+import CustomHeader from '../components/CustomHeader';
 import BottomNav from '../components/BottomNav';
 import transactionService from '../services/transactionService';
 
@@ -94,15 +95,10 @@ const TransactionsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.openDrawer()}>
-          <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-        </TouchableOpacity>
-        <Text style={styles.title}>All Transactions</Text>
-        <TouchableOpacity style={styles.headerIcon}>
-           <Download size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-        </TouchableOpacity>
-      </View>
+      <CustomHeader 
+        title="All Transactions" 
+        rightComponent={<TouchableOpacity style={styles.headerIcon}><Filter size={22} color={Theme.colors.onSurface} strokeWidth={1.5} /></TouchableOpacity>}
+      />
 
       <View style={styles.filterBar}>
          <View style={styles.searchBox}>
