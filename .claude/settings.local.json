@@ -13,7 +13,11 @@
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" /c/apache-maven-3.9.0/bin/mvn *)",
       "Bash(/c/Program Files/Java/jdk-21/bin/java *)",
       "Bash(docker run *)",
-      "Bash(wmic process *)"
+      "Bash(wmic process *)",
+      "Bash(netstat -ano)",
+      "Bash(npx expo *)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(curl *)"
     ]
   }
 }

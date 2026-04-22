@@ -62,17 +62,12 @@ const BottomNav = ({ isAuthenticated = false }) => {
           return (
             <TouchableOpacity
               key={item.name}
-<<<<<<< HEAD
-              style={styles.navItem}
-              onPress={() => handleNavigation(item.name)}
-=======
               style={[styles.navItem, active && styles.navItemActive]}
               onPress={() => {
                 if (!active) {
                   navigation.navigate(item.name);
                 }
               }}
->>>>>>> 83d27b5219a5c9c59de13ef12ad2390de85f7b01
               activeOpacity={0.7}
             >
               <View style={styles.iconContainer}>
