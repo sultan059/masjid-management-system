@@ -35,6 +35,33 @@ const authService = {
     const expiry = await AsyncStorage.getItem('tokenExpiry');
     if (!token || !expiry) return false;
     return Date.now() < parseInt(expiry);
+  },
+
+  requestPasswordReset: async (email) => {
+    try {
+      const response = await api.post('/auth/password-reset', { email });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.message || 'Failed to request password reset';
+    }
+  },
+
+  confirmPasswordReset: async (token, newPassword) => {
+    try {
+      const response = await api.post('/auth/password-reset/confirm', { token, newPassword });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.message || 'Failed to reset password';
+    }
+  },
+
+  changePassword: async (oldPassword, newPassword) => {
+    try {
+      const response = await api.post('/auth/change-password', { oldPassword, newPassword });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.message || 'Failed to change password';
+    }
   }
 };
 

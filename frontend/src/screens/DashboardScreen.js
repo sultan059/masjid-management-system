@@ -87,32 +87,41 @@ const DashboardScreen = ({ isAuthenticated = false, navigation }) => {
     <SafeAreaView style={styles.container}>
       {/* --- Header: Ultra Compact --- */}
       <View style={styles.header}>
-        {isAuthenticated && (
-          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
-            <Menu size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
-          </TouchableOpacity>
-        )}
-        <View style={styles.headerCenter}>
-          <RNImage source={require('../../assets/logo.png')} style={styles.headerLogo} />
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.greeting}>Masjid (Mosque)</Text>
-            <Text style={styles.greeting}>Management System</Text>
-          </View>
-        </View>
-        {!isAuthenticated && (
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => nav.navigate('Login')}
-            activeOpacity={0.7}
-          >
-            <RNImage source={require('../../assets/login-icon.png')} style={styles.loginButtonImage} />
-          </TouchableOpacity>
-        )}
-        {isAuthenticated && (
-          <TouchableOpacity style={[styles.iconButton, styles.notificationBadge]}>
-            <Bell size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
-            <View style={styles.badge} />
-          </TouchableOpacity>
+        {isAuthenticated ? (
+          <>
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
+              <Menu size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
+            </TouchableOpacity>
+            <View style={styles.headerCenter}>
+              <RNImage source={require('../../assets/logo.png')} style={styles.headerLogo} />
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.greeting}>Masjid (Mosque)</Text>
+                <Text style={styles.greeting}>Management System</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={[styles.iconButton, styles.notificationBadge]} onPress={() => navigation.navigate('Notifications')}>
+              <Bell size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
+              <View style={styles.badge} />
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => nav.navigate('Login')}
+              activeOpacity={0.7}
+            >
+              <RNImage source={require('../../assets/login-icon.png')} style={styles.loginButtonImage} />
+            </TouchableOpacity>
+            <View style={styles.headerCenter}>
+              <RNImage source={require('../../assets/logo.png')} style={styles.headerLogo} />
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.greeting}>Masjid (Mosque)</Text>
+                <Text style={styles.greeting}>Management System</Text>
+              </View>
+            </View>
+            <View style={{ width: 40 }} />
+          </>
         )}
       </View>
 
@@ -341,11 +350,7 @@ const styles = StyleSheet.create({
     padding: Theme.spacing.xs,
   },
   loginButton: {
-    position: 'absolute',
-    right: Theme.spacing.lg,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
+    padding: Theme.spacing.xs,
   },
   loginButtonImage: {
     width: 56,

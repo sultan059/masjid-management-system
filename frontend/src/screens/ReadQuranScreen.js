@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    ...Theme.typography.titleLg,
+    ...Theme.typography.headlineMd,
     color: Theme.colors.onSurface,
   },
   headerSubtitle: {

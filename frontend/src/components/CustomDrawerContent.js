@@ -89,7 +89,13 @@ const CustomDrawerContent = (props) => {
         </View>
 
         {/* Profile Header Section */}
-        <View style={styles.profileHeader}>
+        <TouchableOpacity
+          style={styles.profileHeader}
+          onPress={() => {
+            props.navigation.navigate('Profile');
+            props.navigation.closeDrawer();
+          }}
+        >
           <View style={styles.avatarContainer}>
             <User color={Theme.colors.onPrimary} size={36} strokeWidth={1.5} />
           </View>
@@ -100,7 +106,7 @@ const CustomDrawerContent = (props) => {
               <Text style={styles.userRole}>Admin</Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Navigation Items */}
         <View style={styles.navContainer}>

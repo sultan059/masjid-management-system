@@ -1,7 +1,11 @@
 package com.masjid.app.service;
 
+import com.masjid.app.dto.ChangePasswordRequest;
 import com.masjid.app.dto.LoginRequest;
 import com.masjid.app.dto.LoginResponse;
+import com.masjid.app.dto.PasswordResetConfirmRequest;
+import com.masjid.app.dto.PasswordResetRequest;
+import com.masjid.app.dto.PasswordResetResponse;
 import com.masjid.app.dto.RegisterRequest;
 import com.masjid.app.entity.User;
 import com.masjid.app.exception.BadRequestException;
@@ -11,6 +15,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -85,6 +92,52 @@ public class AuthService {
                         .fullName(user.getFullName())
                         .role(user.getRole().name())
                         .build())
+                .build();
+    }
+
+    public PasswordResetResponse requestPasswordReset(PasswordResetRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+
+        // Always return success for security (don't reveal if email exists)
+        if (user == null) {
+            return PasswordResetResponse.builder()
+                    .success(true)
+                    .message("If an account exists with this email, a password reset link will be displayed")
+                    .build();
+        }
+
+        String resetToken = UUID.randomUUID().toString();
+        user.setResetToken(resetToken);
+        user.setResetTokenExpiry(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+
+        return PasswordResetResponse.builder()
+                .success(true)
+                .message("Password reset link generated")
+                .resetToken(resetToken)
+                .build();
+    }
+
+    @Transactional
+    public PasswordResetResponse confirmPasswordReset(PasswordResetConfirmRequest request) {
+        User user = userRepository.findByResetToken(request.getToken()).orElse(null);
+
+        if (user == null) {
+            throw new BadRequestException("Invalid reset token");
+        }
+
+        if (user.getResetTokenExpiry() == null || user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("Reset token has expired");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setResetToken(null);
+        user.setResetTokenExpiry(null);
+        userRepository.save(user);
+
+        return PasswordResetResponse.builder()
+                .success(true)
+                .message("Password has been reset successfully")
                 .build();
     }
 }

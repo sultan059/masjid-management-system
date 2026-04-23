@@ -23,6 +23,8 @@ import authService from './src/services/authService';
 // Screen Imports
 import DashboardScreen from './src/screens/DashboardScreen';
 import LoginScreen from './src/screens/LoginScreen';
+import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 import InventoryScreen from './src/screens/InventoryScreen';
 import PaymentsScreen from './src/screens/PaymentsScreen';
 import NotificationsScreen from './src/screens/NotificationsScreen';
@@ -59,10 +61,12 @@ function AppDrawer({ onLogout, isAuthenticated }) {
       <Drawer.Screen name="Inventory" component={InventoryScreen} />
       <Drawer.Screen name="Reports" component={ReportsScreen} />
       <Drawer.Screen name="Events" component={EventsScreen} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="MosqueInfo">
         {(props) => <DashboardScreen {...props} isAuthenticated={true} />}
       </Drawer.Screen>
       <Drawer.Screen name="Transactions" component={TransactionsScreen} />
+      <Drawer.Screen name="Notifications" component={NotificationsScreen} />
     </Drawer.Navigator>
   );
 }
@@ -124,6 +128,9 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="Login">
           {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
+        </Stack.Screen>
+        <Stack.Screen name="ForgotPassword">
+          {(props) => <ForgotPasswordScreen {...props} />}
         </Stack.Screen>
         <Stack.Screen name="ReadQuran">
           {(props) => <ReadQuranScreen {...props} isAuthenticated={false} />}

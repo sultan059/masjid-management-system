@@ -10,7 +10,6 @@ const navItemsAll = [
   { name: 'Transactions', label: 'Transactions', icon: Wallet },
   { name: 'Financials', label: 'Payments', icon: CreditCard },
   { name: 'Inventory', label: 'Inventory', icon: Package },
-  { name: 'MosqueInfo', label: 'Profile', icon: User },
 ];
 
 const BottomNav = ({ isAuthenticated = false }) => {
@@ -20,14 +19,12 @@ const BottomNav = ({ isAuthenticated = false }) => {
 
   const getActiveRoute = () => {
     const currentRoute = route.name;
-    if (currentRoute === 'MosqueInfo') return 'MosqueInfo';
     return currentRoute;
   };
 
   const activeRoute = getActiveRoute();
 
   const isActive = (itemName) => {
-    if (itemName === 'Profile' && activeRoute === 'MosqueInfo') return true;
     return itemName === activeRoute;
   };
 
