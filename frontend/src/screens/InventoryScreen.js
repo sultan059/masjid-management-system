@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
 import CustomHeader from '../components/CustomHeader';
+import LogoSmall from '../components/LogoSmall';
 import inventoryService from '../services/inventoryService';
 
 const InventoryScreen = () => {
@@ -84,16 +85,17 @@ const InventoryScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader 
-        title="Inventory" 
+      <CustomHeader
+        title="Inventory"
         rightComponent={
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity style={{ padding: 8 }}>
               <Search size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
             </TouchableOpacity>
             <TouchableOpacity style={{ padding: 8, marginLeft: 4 }}>
               <Filter size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
             </TouchableOpacity>
+            <LogoSmall style={{ marginLeft: 8 }} />
           </View>
         }
       />

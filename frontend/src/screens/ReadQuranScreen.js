@@ -13,6 +13,7 @@ import { ChevronLeft, Play, Square, Settings2, Globe, Volume2, BookOpen } from '
 import { Audio } from 'expo-av';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
+import LogoSmall from '../components/LogoSmall';
 
 const ReadQuranScreen = ({ isAuthenticated = false, navigation }) => {
   const [surahs, setSurahs] = useState([]);
@@ -199,15 +200,18 @@ const ReadQuranScreen = ({ isAuthenticated = false, navigation }) => {
         </View>
 
         {selectedSurah ? (
-          <TouchableOpacity 
-            style={styles.langButton} 
-            onPress={() => setTranslationLanguage(prev => prev === 'bn' ? 'en' : 'bn')}
-          >
-            <Globe size={20} color={Theme.colors.primary} />
-            <Text style={styles.langText}>{translationLanguage.toUpperCase()}</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity
+              style={styles.langButton}
+              onPress={() => setTranslationLanguage(prev => prev === 'bn' ? 'en' : 'bn')}
+            >
+              <Globe size={20} color={Theme.colors.primary} />
+              <Text style={styles.langText}>{translationLanguage.toUpperCase()}</Text>
+            </TouchableOpacity>
+            <LogoSmall style={{ marginLeft: 12 }} />
+          </View>
         ) : (
-          <View style={{ width: 40 }} />
+          <LogoSmall style={{ marginLeft: 12 }} />
         )}
       </View>
 

@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
 import CustomHeader from '../components/CustomHeader';
+import LogoSmall from '../components/LogoSmall';
 import donationService from '../services/donationService';
 import transactionService from '../services/transactionService';
 
@@ -83,12 +84,13 @@ const PaymentsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader 
-        title="Payments" 
+      <CustomHeader
+        title="Payments"
+        leftComponent={<LogoSmall style={{ marginLeft: 8 }} />}
         rightComponent={
           <TouchableOpacity style={styles.receiveButton}>
-             <Plus size={20} color={Theme.colors.onPrimary} />
-             <Text style={styles.receiveButtonText}>Receive</Text>
+           <Plus size={20} color={Theme.colors.onPrimary} />
+           <Text style={styles.receiveButtonText}>Receive</Text>
           </TouchableOpacity>
         }
       />

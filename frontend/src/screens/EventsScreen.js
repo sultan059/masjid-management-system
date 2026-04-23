@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
 import CustomHeader from '../components/CustomHeader';
+import LogoSmall from '../components/LogoSmall';
 import eventService from '../services/eventService';
 
 const EventsScreen = () => {
@@ -69,12 +70,15 @@ const EventsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader 
-        title="Events" 
+      <CustomHeader
+        title="Events"
         rightComponent={
-          <TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity>
              <Calendar size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
-          </TouchableOpacity>
+            </TouchableOpacity>
+            <LogoSmall style={{ marginLeft: 8 }} />
+          </View>
         }
       />
 

@@ -11,6 +11,8 @@ import com.masjid.app.entity.User;
 import com.masjid.app.exception.BadRequestException;
 import com.masjid.app.repository.UserRepository;
 import com.masjid.app.security.JwtTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ import java.util.UUID;
 
 @Service
 public class AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -139,5 +143,30 @@ public class AuthService {
                 .success(true)
                 .message("Password has been reset successfully")
                 .build();
+    }
+
+    @Transactional
+    public void changePassword(ChangePasswordRequest request, String userEmail) {
+        log.info("changePassword called for user: {}", userEmail);
+        if (userEmail == null || userEmail.trim().isEmpty()) {
+            log.error("userEmail is null or empty!");
+            throw new BadCredentialsException("User not authenticated");
+        }
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> {
+                    log.error("User not found: {}", userEmail);
+                    return new BadCredentialsException("User not found");
+                });
+
+        log.info("User found: {}, checking old password", user.getEmail());
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            log.error("Password mismatch for user: {}", userEmail);
+            throw new BadCredentialsException("Current password is incorrect");
+        }
+
+        log.info("Updating password for user: {}", userEmail);
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        log.info("Password updated successfully for user: {}", userEmail);
     }
 }

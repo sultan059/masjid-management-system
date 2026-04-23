@@ -20,6 +20,8 @@ import { Theme } from './src/theme/Theme';
 import CustomDrawerContent from './src/components/CustomDrawerContent';
 import authService from './src/services/authService';
 
+import ChangePasswordScreen from './src/screens/ChangePasswordScreen';
+
 // Screen Imports
 import DashboardScreen from './src/screens/DashboardScreen';
 import LoginScreen from './src/screens/LoginScreen';
@@ -137,6 +139,9 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="Main">
           {(props) => <AppDrawer {...props} onLogout={() => setIsAuthenticated(false)} />}
+        </Stack.Screen>
+        <Stack.Screen name="ChangePassword">
+          {(props) => <ChangePasswordScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

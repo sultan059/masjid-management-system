@@ -14,6 +14,7 @@ import { Search, Filter, MoreHorizontal, Download } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import CustomHeader from '../components/CustomHeader';
+import LogoSmall from '../components/LogoSmall';
 import BottomNav from '../components/BottomNav';
 import transactionService from '../services/transactionService';
 
@@ -95,9 +96,9 @@ const TransactionsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader 
-        title="All Transactions" 
-        rightComponent={<TouchableOpacity style={styles.headerIcon}><Filter size={22} color={Theme.colors.onSurface} strokeWidth={1.5} /></TouchableOpacity>}
+      <CustomHeader
+        title="All Transactions"
+        rightComponent={<View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity style={styles.headerIcon}><Filter size={22} color={Theme.colors.onSurface} strokeWidth={1.5} /></TouchableOpacity><LogoSmall style={{ marginLeft: 8 }} /></View>}
       />
 
       <View style={styles.filterBar}>

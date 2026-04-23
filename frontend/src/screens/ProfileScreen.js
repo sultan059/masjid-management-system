@@ -159,7 +159,7 @@ const ProfileScreen = () => {
           <Text style={styles.sectionTitle}>Settings</Text>
 
           <View style={styles.settingsCard}>
-            <TouchableOpacity style={styles.settingsItem}>
+            <TouchableOpacity style={styles.settingsItem} onPress={() => navigation.navigate('ChangePassword')}>
               <View style={styles.settingsLeft}>
                 <Shield size={20} color={Theme.colors.onSurfaceVariant} />
                 <Text style={styles.settingsText}>Change Password</Text>

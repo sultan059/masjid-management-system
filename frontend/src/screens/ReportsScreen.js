@@ -14,6 +14,7 @@ import { BarChart2, PieChart, TrendingUp, Download, ChevronRight, Filter, Menu }
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
+import LogoSmall from '../components/LogoSmall';
 import reportService from '../services/reportService';
 import transactionService from '../services/transactionService';
 
@@ -81,9 +82,12 @@ const ReportsScreen = () => {
           <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
         </TouchableOpacity>
         <Text style={styles.title}>Reports</Text>
-        <TouchableOpacity style={styles.headerIcon}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity style={styles.headerIcon}>
            <Filter size={24} color={Theme.colors.onSurface} strokeWidth={1.5} />
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <LogoSmall style={{ marginLeft: 12 }} />
+        </View>
       </View>
 
       <ScrollView

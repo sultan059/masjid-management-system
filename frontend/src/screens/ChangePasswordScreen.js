@@ -39,7 +39,17 @@ const ChangePasswordScreen = () => {
     }
 
     if (newPassword.length < 6) {
-      setError('New password must be at least 6 characters');
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    if (!/[A-Za-z]/.test(newPassword)) {
+      setError('Password must contain at least 1 letter');
+      return;
+    }
+
+    if (!/[0-9]/.test(newPassword)) {
+      setError('Password must contain at least 1 digit');
       return;
     }
 
@@ -58,11 +68,16 @@ const ChangePasswordScreen = () => {
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      setTimeout(() => {
-        navigation.goBack();
-      }, 2000);
+      setTimeout(async () => {
+        await authService.logout();
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
+      }, 1500);
     } catch (err) {
-      setError(err.toString());
+      const message = err.response?.data?.message || err.message || 'An unexpected error occurred while trying to change the password';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -92,7 +107,7 @@ const ChangePasswordScreen = () => {
         {/* --- Form --- */}
         <View style={styles.formCard}>
           <Text style={styles.formTitle}>Set New Password</Text>
-          <Text style={styles.formSubtitle}>Ensure your new password is secure</Text>
+          <Text style={styles.formSubtitle}>Min 6 chars with letters and numbers</Text>
 
           {/* Old Password */}
           <View style={styles.inputContainer}>
@@ -200,6 +215,7 @@ const ChangePasswordScreen = () => {
         <View style={styles.footer}>
           <Text style={styles.footerText}>Password requirements:</Text>
           <Text style={styles.footerHint}>- At least 6 characters</Text>
+          <Text style={styles.footerHint}>- At least 1 letter and 1 digit</Text>
           <Text style={styles.footerHint}>- Different from current password</Text>
         </View>
       </View>

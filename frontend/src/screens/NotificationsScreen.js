@@ -13,6 +13,7 @@ import { Bell, MessageSquare, Info, AlertTriangle, ChevronRight, Check, Menu } f
 import { useNavigation } from '@react-navigation/native';
 import { Theme } from '../theme/Theme';
 import BottomNav from '../components/BottomNav';
+import LogoSmall from '../components/LogoSmall';
 import notificationService from '../services/notificationService';
 
 const NotificationsScreen = () => {
@@ -97,9 +98,12 @@ const NotificationsScreen = () => {
           <Menu size={22} color={Theme.colors.onSurface} strokeWidth={1.5} />
         </TouchableOpacity>
         <Text style={styles.title}>Notifications</Text>
-        <TouchableOpacity onPress={markAllRead}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity onPress={markAllRead}>
            <Text style={styles.markRead}>Mark all read</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <LogoSmall style={{ marginLeft: 12 }} />
+        </View>
       </View>
 
       <FlatList
